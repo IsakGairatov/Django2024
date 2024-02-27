@@ -17,12 +17,24 @@ class Food(common):
         data = [self.pk, self.name, self.description, self.cost, self.cat]
         return data
 
+    def changedescription(self, new):
+        self.description = new
+
+    def changeCost(self, new):
+        self.cost = new
+
+    def changeName(self, new):
+        self.name = new
+
     def __str__(self):
         return self.name
 
 class Category(common):
     def getCatData(self):
         return [self.pk, self.name]
+
+    def changeName(self, new):
+        self.name = new
 
     def __str__(self):
         return self.name
