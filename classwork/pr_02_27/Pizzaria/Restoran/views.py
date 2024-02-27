@@ -1,3 +1,8 @@
 from django.shortcuts import render
+from .models import *
+# Query sets
 
-# Create your views here.
+All_food = Food.objects.all()
+All_cat = Category.objects.all()
+
+
