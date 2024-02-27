@@ -23,6 +23,14 @@ def Purchased_Food(P_id):
 def GetFood(F_id):
     return Food.objects.get(pk=F_id)
 
+#Return Category by Id
+def GetCategory(C_id):
+    return Category.objects.get(pk=C_id)
+
+#Return Food more expensive than Cost
+def GetMoreExpensive(Cost):
+    return Food.objects.filter(cost_gte=Cost)
+
 
 
 
