@@ -17,6 +17,8 @@ urlpatterns = [
     path('busket/', busket, name='busket'),
     path('purchases/', purch, name='purchases'),
     path('profil/', profil, name='profil'),
+
+    path('addBusket', add_Buscket, name='addBusket')
 ]
 
 

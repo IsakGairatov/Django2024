@@ -8,8 +8,12 @@
             {% endif %}
     {{product.name}}
             <p>цена: {{product.cost}}
-            <button type="submit">В Корзину</button></p>
-            количество: <input type="number" name="amount" min="1" max="{{product.amount}}" value=1 />
+
+
+                <button type="submit">В Корзину</button></p>
+                количество: <input type="number" name="amount" min="1" max="{{product.amount}}" value=1 />
+
+
 
         </div>
     {% endfor %}

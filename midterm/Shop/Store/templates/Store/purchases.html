@@ -1,3 +1,4 @@
+{% load products_tag %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,6 +6,18 @@
     <title>Title</title>
 </head>
 <body>
+     {% if request.user.is_authenticated %}
+        {% ShowMenu 2 %}
+    {% else %}
+        {% ShowMenu 1 %}
+    {% endif %}
+     <h1>Ваши покупки</h1>
 
+    {% for b in busket %}
+        <p><img src="{{b.product.photo.url}}" width="200px"></p>
+        {{b.product.name}}
+        <br>цена: {{b.product.cost}}
+        <br>количество: {{b.product.amount}}
+    {% endfor %}
 </body>
 </html>

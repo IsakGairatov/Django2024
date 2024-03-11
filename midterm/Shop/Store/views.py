@@ -21,13 +21,22 @@ def get_pr_by_cat(request, cat_id):
     return render(request, 'Store/productList.html', {'Products': Products})
 
 def busket(request):
-    return render(request, 'Store/busket.html')
+    b = BusketItems.objects.get_UserBusket(request.user.pk).get_not_purchased()
+    total_cost = 0
+
+    for i in b:
+        total_cost += i.product.cost * i.amount
+
+
+    return render(request, 'Store/busket.html', {'busket' : b, 'total_cost': total_cost})
 
 def purch(request):
-    return render(request, 'Store/purchases.html')
+    b = BusketItems.objects.get_UserBusket(request.user.pk).get_purchased()
+    return render(request, 'Store/purchases.html', {'busket': b})
 
 def profil(request):
-    return render(request, 'Store/profil.html')
+    us = UserInfo.objects.get(user=request.user)
+    return render(request, 'Store/profil.html', {'me': us})
 
 class LoginUser(LoginView):
     form_class = AuthenticationForm

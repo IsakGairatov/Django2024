@@ -3,6 +3,8 @@ from django.conf import settings
 
 # Query Sets
 
+
+
 class ProductQuerySets(models.QuerySet):
     def get_all_products(self):
         return self.all()
@@ -19,6 +21,11 @@ class BusketItemsQuerySet(models.QuerySet):
     def get_UserBusket(self, User_id):
         return self.filter(user=User_id)
 
+    def get_purchased(self):
+        return self.filter(purch=True)
+
+    def get_not_purchased(self):
+        return self.filter(purch=None)
 
 class Product(models.Model):
     name = models.CharField(max_length=255)
@@ -47,6 +54,7 @@ class UserInfo(models.Model):
     photo = models.ImageField(upload_to="photos/%Y/%m/%d/")
     desc = models.TextField(blank=True)
     default_address = models.OneToOneField('Adress', on_delete=models.CASCADE, blank=True, null=True)
+
 
     def __str__(self):
         return f'{self.user.username} Info'
