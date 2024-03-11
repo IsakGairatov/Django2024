@@ -1,0 +1,16 @@
+{% extends 'Store/base.html' %}
+
+{% block content %}
+{% for product in Products %}
+        <div>
+            {% if product.photo %}
+        <p><img src="{{product.photo.url}}" width="200px"></p>
+            {% endif %}
+    {{product.name}}
+            <p>цена: {{product.cost}}
+            <button type="submit">В Корзину</button></p>
+            количество: <input type="number" name="amount" min="1" max="{{product.amount}}" value=1 />
+
+        </div>
+    {% endfor %}
+{% endblock %}
