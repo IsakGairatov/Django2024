@@ -10,8 +10,13 @@
             <p>цена: {{product.cost}}
 
 
-                <button type="submit">В Корзину</button></p>
-                количество: <input type="number" name="amount" min="1" max="{{product.amount}}" value=1 />
+            <button id="getValueButton" type="submit"
+                     onclick="location.href='{% url 'addBusket' pr=product.pk am=1%}'" name='mybtn1'>
+                В Корзину
+            </button></p>
+            количество: <input type="number" id="myInput" min="1" max="{{product.amount}}" value=1 />
+
+
 
 
 

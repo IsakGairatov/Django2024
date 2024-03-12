@@ -1,6 +1,9 @@
+import logging
+
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.views import LoginView
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
@@ -38,6 +41,24 @@ def profil(request):
     us = UserInfo.objects.get(user=request.user)
     return render(request, 'Store/profil.html', {'me': us})
 
+def addAdress(request):
+    if request.method == 'POST':
+        form = addAdressForm(request.POST)
+        if form.is_valid():
+            try:
+                form.instance.user = request.user
+                Adress.objects.get(user=request.user).delete()
+                form.save()
+                ui = UserInfo.objects.get(user=request.user)
+                ui.default_address = Adress.objects.get(user=request.user)
+                ui.save()
+                return redirect('profil')
+            except:
+                form.add_error(None, 'Ошибка')
+    else:
+        form = addAdressForm()
+    return render(request, 'Store/addAdress.html', {'form': form})
+
 class LoginUser(LoginView):
     form_class = AuthenticationForm
     template_name = 'Store/login.html'
@@ -55,18 +76,34 @@ class RegisterUser(CreateView):
     def form_valid(self, form):
         user = form.save()
         login(self.request, user)
+        UserInfo.objects.just_registrated(user)
         return redirect('home')
 
 def logout_user(request):
     logout(request)
     return redirect('login')
 
-def add_Buscket(request, product, amount):
-    if request.user.is_authenticated():
-        pr = product
-        am = amount
-        us = request.user.pk
 
-        b = BusketItems.objects.create(product = pr, amount=am, user=us)
-        b.save()
+
+def add_Buscket(request, pr, am):
+    previous_page_url = request.META.get('HTTP_REFERER')
+    if request.user.is_authenticated:
+        BusketItems.objects.addItem(pr, am, request.user)
+        return redirect(previous_page_url)
+
+    else: return redirect(previous_page_url)
+
+def del_Buscket(request, id):
+    previous_page_url = request.META.get('HTTP_REFERER')
+    if request.user.is_authenticated:
+        BusketItems.objects.get(pk=id).delete()
+        return redirect(previous_page_url)
+
+
+def buy_Buscket(request):
+    previous_page_url = request.META.get('HTTP_REFERER')
+    if request.user.is_authenticated:
+
+        return redirect(previous_page_url)
+
 

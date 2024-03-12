@@ -11,6 +11,8 @@
     {% else %}
         {% ShowMenu 1 %}
     {% endif %}
+    <h1>Ваша Корзина</h1>
+
     <button>Купить всё</button>
     Общая цена: {{total_cost}}
     {% for b in busket %}
@@ -18,7 +20,10 @@
         {{b.product.name}}
         <br>цена: {{b.product.cost}}
         <br>количество: {{b.amount}}
-        <br><button>Удалить</button>
+        <br><button type="submit"
+                    onclick="location.href='{% url 'delBusket' id=b.pk%}'">
+                Удалить
+            </button>
     {% endfor %}
 
 

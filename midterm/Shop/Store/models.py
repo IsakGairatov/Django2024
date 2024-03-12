@@ -3,8 +3,6 @@ from django.conf import settings
 
 # Query Sets
 
-
-
 class ProductQuerySets(models.QuerySet):
     def get_all_products(self):
         return self.all()
@@ -22,10 +20,29 @@ class BusketItemsQuerySet(models.QuerySet):
         return self.filter(user=User_id)
 
     def get_purchased(self):
-        return self.filter(purch=True)
+        return self.all().exclude(purch=None)
 
     def get_not_purchased(self):
         return self.filter(purch=None)
+
+    def addItem(self, p, a, u):
+        p = Product.objects.get(pk=p)
+
+        b = self.create(product=p, amount=a, user=u)
+        b.save()
+
+
+class PurchQuerySets(models.QuerySet):
+    def makePurch(self, u, a, c):
+        a = Adress.objects.get(pk=a)
+
+        p = self.create(user=u, adress=a, cost=c)
+        p.save()
+
+class UserInfoQuerySets(models.QuerySet):
+    def just_registrated(self, u):
+        ui = self.create(user=u)
+        ui.save()
 
 class Product(models.Model):
     name = models.CharField(max_length=255)
@@ -53,15 +70,16 @@ class UserInfo(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     photo = models.ImageField(upload_to="photos/%Y/%m/%d/")
     desc = models.TextField(blank=True)
-    default_address = models.OneToOneField('Adress', on_delete=models.CASCADE, blank=True, null=True)
-
+    default_address = models.OneToOneField('Adress', on_delete=models.SET_NULL, blank=True, null=True)
+    objects = UserInfoQuerySets.as_manager()
 
     def __str__(self):
         return f'{self.user.username} Info'
 
 
+
 class Adress(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     country = models.CharField(max_length=255)
     city = models.CharField(max_length=255)
     street = models.CharField(max_length=255)
@@ -86,8 +104,9 @@ class BusketItems(models.Model):
 class Purchase(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)
-    adress = models.ForeignKey('Adress', on_delete=models.CASCADE)
+    adress = models.ForeignKey('Adress', on_delete=models.PROTECT)
     cost = models.IntegerField()
+    objects = PurchQuerySets.as_manager()
 
     def __str__(self):
         return f'{self.user.username} date: {self.date}'

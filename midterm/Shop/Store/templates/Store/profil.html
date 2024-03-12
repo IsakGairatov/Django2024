@@ -4,6 +4,17 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+
+    <script>
+        function toggleElement(a) {
+            var element = document.getElementById(a);
+            if (element.style.display === 'none') {
+                element.style.display = 'block';
+            } else {
+                element.style.display = 'none';
+            }
+        }
+    </script>
 </head>
 <body>
     {% if request.user.is_authenticated %}
@@ -40,9 +51,29 @@
 
     <h3>Описание:</h3>
     {{me.desc}}
-    {%if 1 %}
+
+    <button if=desc onclick="toggleElement('1')">Изменить</button>
+    {% if 1 %}
+    <div id="1">
+        This element is visible!
+    </div>
+    {% endif %}
+
+
+    <h3>Адрес:</h3>
+     {%if me.default_address %}
+        {{me.default_address|adress2}}
     {% else %}
+        Нет Адреса
+        <p>Без адресса, вы не сможете ничего купить</p>
     {% endif%}
+
+    <a href="{% url 'addAdress' %}">
+        <button>Сменить Адрес</button>
+    </a>
+
+    <br><br><br><br>
+
 
 </body>
 </html>

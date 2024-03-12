@@ -14,10 +14,12 @@
      <h1>Ваши покупки</h1>
 
     {% for b in busket %}
+        <h3>{{b.purch.date|dateTime}}</h3>
         <p><img src="{{b.product.photo.url}}" width="200px"></p>
         {{b.product.name}}
         <br>цена: {{b.product.cost}}
-        <br>количество: {{b.product.amount}}
+        <br>количество: {{b.amount}}
+        <br>адресс: {{b.purch.adress | adress1}}
     {% endfor %}
 </body>
 </html>

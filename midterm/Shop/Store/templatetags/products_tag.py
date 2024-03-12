@@ -15,3 +15,20 @@ def ShowMenu(isLoged):
     else:
         menu = [{'title': 'Главная', 'link': 'home'}, {'title': 'Моя Корзина', 'link': 'busket'}, {'title': 'Мои Покупки', 'link': 'purchases'}]
     return {'menu': menu}
+
+@register.filter
+def dateTime(d):
+    return d.strftime('%d/%m/%Y %H:%m')
+
+@register.filter
+def isAuthMenu(v):
+    return len(v) > 2
+
+@register.filter
+def adress1(a):
+    return f'{a.country}, г. {a.city}'
+
+@register.filter
+def adress2(a):
+    return f'{a.country}, г. {a.city}' \
+            f' ул. {a.street}, дом {a.house}'

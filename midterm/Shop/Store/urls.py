@@ -17,8 +17,11 @@ urlpatterns = [
     path('busket/', busket, name='busket'),
     path('purchases/', purch, name='purchases'),
     path('profil/', profil, name='profil'),
+    path('addAdress/', addAdress, name='addAdress'),
 
-    path('addBusket', add_Buscket, name='addBusket')
+    path('addBusket/<int:pr>/<int:am>/', add_Buscket, name='addBusket'),
+    path('delBusket/<int:id>/', del_Buscket, name='delBusket'),
+    path('buyBusket', buy_Buscket, name='buyBysket')
 ]
 
 
