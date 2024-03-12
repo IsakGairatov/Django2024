@@ -39,7 +39,52 @@ def purch(request):
 
 def profil(request):
     us = UserInfo.objects.get(user=request.user)
-    return render(request, 'Store/profil.html', {'me': us})
+
+    if request.method == 'POST':
+        form1 = UserDescForm(request.POST)
+        if form1.is_valid():
+            try:
+                ui = UserInfo.objects.get(user=request.user)
+                ui.desc = form1.instance.desc
+                ui.save()
+                return redirect('profil')
+            except:
+                form1.add_error(None, 'Ошибка')
+    else:
+        form1 = UserDescForm
+
+    if request.method == 'POST':
+        u = request.user
+        form2 = UserForm(request.POST, instance=u)
+        if form2.is_valid():
+            try:
+                form2.save()
+                return redirect('profil')
+            except:
+                form2.add_error(None, 'Ошибка')
+    else:
+        initial_data = {
+            'username': request.user.username,
+            'email': request.user.email,
+            'first_name': request.user.first_name,
+            'last_name': request.user.last_name
+        }
+
+        form2 = UserForm(initial=initial_data)
+
+    if request.method == 'POST':
+        ui = request.user.userinfo
+        form3 = UserImageForm(request.POST, request.FILES, instance=ui)
+        if form3.is_valid():
+            try:
+                form3.save()
+                return redirect('profil')
+            except:
+                form3.add_error(None, 'Ошибка')
+    else:
+        form3 = UserImageForm
+
+    return render(request, 'Store/profil.html', {'me': us, 'form1': form1, 'form2': form2, 'form3': form3})
 
 def addAdress(request):
     if request.method == 'POST':

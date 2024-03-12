@@ -11,7 +11,7 @@ def ShowCats():
 @register.inclusion_tag('Store/menu.html')
 def ShowMenu(isLoged):
     if isLoged == 1:
-        menu = [{'title': 'Главная', 'link': 'home'}, {'title': 'Войти', 'link': 'login'}]
+        menu = [{'title': 'Главная', 'link': 'home'}, {'title': 'Войти', 'link': 'login'}, {'title':'Зарегистрироваться', 'link' : 'reg'}]
     else:
         menu = [{'title': 'Главная', 'link': 'home'}, {'title': 'Моя Корзина', 'link': 'busket'}, {'title': 'Мои Покупки', 'link': 'purchases'}]
     return {'menu': menu}
@@ -22,7 +22,7 @@ def dateTime(d):
 
 @register.filter
 def isAuthMenu(v):
-    return len(v) > 2
+    return v[1]['title'] != 'Войти'
 
 @register.filter
 def adress1(a):

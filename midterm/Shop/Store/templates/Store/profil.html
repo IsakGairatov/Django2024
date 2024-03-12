@@ -6,6 +6,16 @@
     <title>Title</title>
 
     <script>
+        ids = ['ava', 'userdata', 'desc']
+
+        document.addEventListener("DOMContentLoaded", function() {
+        for (var i = 0; i < ids.length; i++) {
+            var element = document.getElementById(ids[i]);
+            element.style.display = 'none';
+        }
+        });
+
+
         function toggleElement(a) {
             var element = document.getElementById(a);
             if (element.style.display === 'none') {
@@ -29,6 +39,15 @@
         <p><img src="{{me.photo.url}}" width="200px"></p>
     {% endif%}
 
+    <button onclick="toggleElement('ava')">Изменить</button>
+    <form id="ava" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form3.as_p }}
+        <button type="submit">
+            готово
+        </button>
+    </form>
+
     {%if user.first_name %}
         <h3>Имя: {{user.first_name}}</h3>
     {% else %}
@@ -49,15 +68,31 @@
 
     <h3>юзернейм: {{user.username}}</h3>
 
+    <button onclick="toggleElement('userdata')">Изменить</button>
+    <div id="userdata">
+        <form method="post">
+        {% csrf_token %}
+        {{ form2.as_p }}
+        <button type="submit">
+            готово
+        </button>
+    </form>
+    </div>
+
+
     <h3>Описание:</h3>
     {{me.desc}}
 
-    <button if=desc onclick="toggleElement('1')">Изменить</button>
-    {% if 1 %}
-    <div id="1">
-        This element is visible!
+    <button if=desc onclick="toggleElement('desc')">Изменить</button>
+    <div id="desc">
+        <form method="post">
+        {% csrf_token %}
+        {{ form1.as_p }}
+        <button onclick="toggleElement('desc')" type="submit">
+            готово
+        </button>
+    </form>
     </div>
-    {% endif %}
 
 
     <h3>Адрес:</h3>
@@ -72,7 +107,6 @@
         <button>Сменить Адрес</button>
     </a>
 
-    <br><br><br><br>
 
 
 </body>

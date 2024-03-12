@@ -12,7 +12,7 @@ urlpatterns = [
     path('home/', homepage, name='home'),
     path('login/', LoginUser.as_view(), name='login'),
     path('logout/', logout_user, name='logout'),
-    path('reg/', RegisterUser.as_view()),
+    path('reg/', RegisterUser.as_view(), name='reg'),
     path('category/<int:cat_id>/', get_pr_by_cat),
     path('busket/', busket, name='busket'),
     path('purchases/', purch, name='purchases'),
