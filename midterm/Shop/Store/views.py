@@ -148,24 +148,23 @@ def del_Buscket(request, id):
 def buy_Buscket(request):
     previous_page_url = request.META.get('HTTP_REFERER')
 
-    if not request.user.adress:
-        redirect('addAdress')
+    try:
+        if request.user.is_authenticated:
+            u = request.user
+            bis = BusketItems.objects.get_UserBusket(u.pk)
+            b = bis.get_not_purchased()
+            total_cost = 0
 
-    if request.user.is_authenticated:
-        u = request.user
-        bis = BusketItems.objects.get_UserBusket(u.pk)
-        b = bis.get_not_purchased()
-        total_cost = 0
+            for i in b:
+                total_cost += i.product.cost * i.amount
 
-        for i in b:
-            total_cost += i.product.cost * i.amount
+            prch = Purchase.objects.makePurch(u, u.adress, total_cost)
 
-        prch = Purchase.objects.makePurch(u, u.adress, total_cost)
+            for b in bis:
+                b.purch = prch
+                b.save()
 
-        for b in bis:
-            b.purch = prch
-            b.save()
-
-        return redirect(previous_page_url)
-
+            return redirect(previous_page_url)
+    except:
+        return redirect('addAdress')
 
