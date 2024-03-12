@@ -13,7 +13,9 @@
     {% endif %}
     <h1>Ваша Корзина</h1>
 
-    <button>Купить всё</button>
+    <button type="submit" onclick="location.href='{% url 'buyBysket' %}'">
+        Купить всё
+    </button>
     Общая цена: {{total_cost}}
     {% for b in busket %}
         <p><img src="{{b.product.photo.url}}" width="200px"></p>

@@ -34,10 +34,10 @@ class BusketItemsQuerySet(models.QuerySet):
 
 class PurchQuerySets(models.QuerySet):
     def makePurch(self, u, a, c):
-        a = Adress.objects.get(pk=a)
-
         p = self.create(user=u, adress=a, cost=c)
         p.save()
+
+        return p
 
 class UserInfoQuerySets(models.QuerySet):
     def just_registrated(self, u):

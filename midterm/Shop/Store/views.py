@@ -34,7 +34,7 @@ def busket(request):
     return render(request, 'Store/busket.html', {'busket' : b, 'total_cost': total_cost})
 
 def purch(request):
-    b = BusketItems.objects.get_UserBusket(request.user.pk).get_purchased()
+    b = BusketItems.objects.get_UserBusket(request.user.pk).get_purchased().order_by('-purch__date')
     return render(request, 'Store/purchases.html', {'busket': b})
 
 def profil(request):
@@ -147,7 +147,24 @@ def del_Buscket(request, id):
 
 def buy_Buscket(request):
     previous_page_url = request.META.get('HTTP_REFERER')
+
+    if not request.user.adress:
+        redirect('addAdress')
+
     if request.user.is_authenticated:
+        u = request.user
+        bis = BusketItems.objects.get_UserBusket(u.pk)
+        b = bis.get_not_purchased()
+        total_cost = 0
+
+        for i in b:
+            total_cost += i.product.cost * i.amount
+
+        prch = Purchase.objects.makePurch(u, u.adress, total_cost)
+
+        for b in bis:
+            b.purch = prch
+            b.save()
 
         return redirect(previous_page_url)
 
